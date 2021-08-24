@@ -1,2 +1,2 @@
-# musical-broccoli
-A javascript-driven quiz about javascript
+# Javascript Quiz
+A javascript-driven quiz about javascript.
