@@ -1,0 +1,71 @@
+/* Global styles */
+
+body {
+    font-family:'Trebuchet MS', 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+    line-height: 120%;
+}
+
+body h1 {
+    font-weight: bolder;
+    font-size: x-large;
+}
+
+body h2 {
+    font-weight: bolder;
+    font-size: larger;
+}
+
+/* Inside the header */
+.header {
+    margin: 2px;
+    padding:2px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-content {
+    border: 1px green solid;
+    text-align: left;
+    width: 10em;
+    font-size: larger;
+}
+
+#view-highscores-link a {
+    text-decoration: none;
+    color: purple;
+}
+
+#view-highscores-link a:hover {
+    text-decoration: underline;
+}
+
+/* Inside the quiz container */
+main {
+    display: flex;
+    flex-direction: column;
+    border: 1px green solid;
+    align-items: center;
+}
+
+.centered-quiz-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 30%;
+    padding: 20px;
+    margin: 5em 0em 5em 0em;
+    border: 1px red solid;
+}
+
+.pre-quiz {
+    text-align: center;
+}
+
+.quiz-active h2 {
+    text-align: center;
+}
+
+
+
+
+

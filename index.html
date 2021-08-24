@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang = 'en'>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JS Quiz</title>
+    <meta name="description" content="A quiz for testing your javascript knowledge.">
+    <meta name="author" content="Jared Kohrt">
+    <link rel = "stylesheet" href = "assets/css/reset.css">
+    <link rel = "stylesheet" href = "assets/css/style.css">
+</head>
+
+<body>
+    <header class = "header">
+        <div class = "header-content" id = "view-highscores-link">
+            <a href = "assets/HighScores.html">SCORES</a>
+        </div>
+        <div class = "header-content" id = "timer">TIME:</div>
+    </header>
+
+    <main>
+        <article class = "centered-quiz-container">
+            <!--These tags will only display before and after the quiz-->   
+            <div class = "pre-quiz" hidden = "false">
+                <h1>PRE-HEADER</h1>
+                <p>QUIZ RULES</p>
+                <button id = "startButton">Start Quiz</button>
+            </div>
+
+            <!--These tags will only display during the quiz-->
+            <div class = "quiz-active" hidden = "true">
+                <h2 class = "quiz-header">QUIZ HEADER</h2>
+                <ul class = "quiz-questions">
+                    <!--List items added dynamically in quizControls.js-->
+                </ul>
+
+                <div>
+                    <hr>
+                    <div class = "quiz-feedback">RIGHT/WRONG</div>
+                </div>
+                
+            </div>
+
+            <div class = "post-quiz">
+                <h2>All Done!</h2>
+                <p>enter initials</p>
+                <input type = "text" id = "playerInitials">
+            </div>
+        </article>
+        
+    </main>
+</body>
+
+<script src = "quizControls.js"></script>
+
+</html>
