@@ -22,22 +22,22 @@
     <main>
         <article class = "centered-quiz-container">
             <!--These tags will only display before and after the quiz-->   
-            <div class = "pre-quiz" hidden = "false">
+            <div class = "pre-quiz">
                 <h1>PRE-HEADER</h1>
                 <p>QUIZ RULES</p>
                 <button id = "startButton">Start Quiz</button>
             </div>
 
             <!--These tags will only display during the quiz-->
-            <div class = "quiz-active" hidden = "true">
+            <div class = "quiz-active">
                 <h2 class = "quiz-header">QUIZ HEADER</h2>
-                <ul class = "quiz-questions">
+                <ul class = "quiz-answers">
                     <!--List items added dynamically in quizControls.js-->
                 </ul>
 
-                <div>
+                <div class = "quiz-feedback">
                     <hr>
-                    <div class = "quiz-feedback">RIGHT/WRONG</div>
+                    <p>RIGHT/WRONG<p>
                 </div>
                 
             </div>
@@ -52,6 +52,6 @@
     </main>
 </body>
 
-<script src = "quizControls.js"></script>
+<script src = "assets/javascript/quizControls.js"></script>
 
 </html>

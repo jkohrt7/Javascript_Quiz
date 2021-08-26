@@ -57,12 +57,25 @@ main {
     border: 1px red solid;
 }
 
+/* dynamically set styles */
 .pre-quiz {
     text-align: center;
 }
 
+.quiz-active {
+    display:none;
+}
+
 .quiz-active h2 {
     text-align: center;
+}
+
+.post-quiz {
+    display: none;
+}
+
+.quiz-feedback {
+    display: none;
 }
 
 
