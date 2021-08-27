@@ -57,6 +57,10 @@ main {
     border: 1px red solid;
 }
 
+.feedback {
+    color: lightgray;
+}
+
 /* dynamically set styles */
 .pre-quiz {
     text-align: center;
@@ -74,10 +78,13 @@ main {
     display: none;
 }
 
-.quiz-feedback {
+#incorrect-feedback {
     display: none;
 }
 
+#correct-feedback {
+    display: none;
+}
 
 
 

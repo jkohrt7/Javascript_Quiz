@@ -14,9 +14,9 @@
 <body>
     <header class = "header">
         <div class = "header-content" id = "view-highscores-link">
-            <a href = "assets/HighScores.html">SCORES</a>
+            <a href = "assets/HighScores.html">View HighScores</a>
         </div>
-        <div class = "header-content" id = "timer">TIME:</div>
+        <div class = "header-content" id = "timer">TIME:<span id = "numTimer"></span></div>
     </header>
 
     <main>
@@ -35,10 +35,9 @@
                     <!--List items added dynamically in quizControls.js-->
                 </ul>
 
-                <div class = "quiz-feedback">
-                    <hr>
-                    <p>RIGHT/WRONG<p>
-                </div>
+                <hr>
+                <p class = "feedback" id = "incorrect-feedback">Incorrect!</p>
+                <p class = "feedback" id = "correct-feedback">Correct!</p>
                 
             </div>
 
@@ -46,6 +45,7 @@
                 <h2>All Done!</h2>
                 <p>enter initials</p>
                 <input type = "text" id = "playerInitials">
+                <button id = "submitButton">Submit</button>
             </div>
         </article>
         

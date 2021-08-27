@@ -6,7 +6,11 @@ let quizContent = document.querySelector(".quiz-active");
 let quizHeader = document.querySelector(".quiz-header");
 let answerList = document.querySelector(".quiz-answers");
 
+//Game dependent variables
+let score = 0;
+let timer = 60;
 
+/* ~~~~Classes and Object Declarations~~~~ */
 
 /** 
  * @class Question  
@@ -63,12 +67,14 @@ let q4 = new Question(
     ]
 )
 
-let questionArr = [q1,q2,q3,q4];
+const questionArr = [q1,q2,q3,q4];
 let unusedQuestionPool = [q1,q2,q3,q4];
+
+/* ~~~~Helper Functions~~~~ */
 
 //Add a question and possible answers to the screen
 function renderQuestion(question) {
-    console.log(unusedQuestionPool)
+
     //clear out existing list elements
     answerList.innerHTML = "";
 
@@ -83,27 +89,49 @@ function renderQuestion(question) {
         node.setAttribute("data-answer", question.answers[i][1]);
         answerList.appendChild(node);
     }
-
 }
 
 //Handles clicking a question
 function handleQuestionClick(e) {
     let isSolution = e.target.getAttribute("data-answer");
+    renderFeedback(isSolution);
+
     if(isSolution) {
-        //TODO: update score, display message
-        console.log("+1")
-        //Select new question
-    }
+        score += 1;
+    } 
+
     if(unusedQuestionPool.length === 0){
         //TODO: send to end screen
-        console.log("The End")
+        transitionToEnd();
         return;
     } else {
         renderQuestion(drawFromQuestionPool());
     }
 }
 
-//returns a question in the pool and then removes it
+//Displays a temporary feedback message
+function renderFeedback(bool) {
+    feedbackTag = document.querySelector("#feedbackText")
+
+    if(bool){
+        //display true for 30 seconds
+        correctTag = document.querySelector("#correct-feedback")
+        correctTag.setAttribute("style", "display: block;")
+        setTimeout(() => {
+            correctTag.setAttribute("style", "display: none");
+        },3000)
+    } 
+    else {
+        incorrectTag = document.querySelector("#incorrect-feedback")
+        incorrectTag.setAttribute("style", "display: block;")
+        setTimeout(() => {
+            correctTag.setAttribute("style", "display: none");
+        },3000)
+    }
+
+}
+
+//Returns a question in the pool and then removes it
 function drawFromQuestionPool() {
     nextQuestionIndex = Math.floor(Math.random() * unusedQuestionPool.length);
     nextQuestion = unusedQuestionPool[nextQuestionIndex];
@@ -111,20 +139,44 @@ function drawFromQuestionPool() {
     return nextQuestion;
 }
 
-//Start button resets question pool and moves from pre-quiz divs to quiz-active divs
-startButton = document.querySelector("#startButton");
-startButton.addEventListener('click', () => {
+/* ~~~~ Transition Functions ~~~~ */
 
-    //ensure all questions are currently in the question pool using a shallow copy
+//Handles transition from pre-quiz to in-quiz
+function transitionToQuiz() {
+    //Reset global game variables
     unusedQuestionPool = questionArr.map((x) => x);
+    score = 0;
 
-    //swap from beginning screen to quiz screen
+    //Alter visible divs
     preQuizContent.setAttribute("style", "display: none;");
     quizContent.setAttribute("style", "display: block;");
+    return;
+}
 
-    //select the first question to populate the quiz screen and remove it from the pool
+//handles transition from in-quiz to post-quiz
+function transitionToEnd() {
+    //todo: save data locally
+
+    quizContent.setAttribute("style", "display: none;");
+    postQuizContent.setAttribute("style", "display: block;");
+    return;
+}
+
+//handles transition from post-quiz to pre-quiz
+function transitionToStart() {
+    postQuizContent.setAttribute("style", "display: none;");
+    preQuizContent.setAttribute("style", "display: block;");
+    return;
+}
+
+/* ~~~~ Event Listeners ~~~~ */
+
+//Clicking the start button begins a new game and renders the first set of questions
+startButton = document.querySelector("#startButton");
+startButton.addEventListener('click', () => {
+    transitionToQuiz();
     renderQuestion(drawFromQuestionPool());
 });
 
-//
+//Clicking any <li> in answerList bubbles up to this event
 answerList.addEventListener("click", handleQuestionClick)
