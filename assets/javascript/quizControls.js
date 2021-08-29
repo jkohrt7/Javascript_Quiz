@@ -10,6 +10,7 @@ let numTimer = document.querySelector("#numTimer");
 //Game dependent variables
 let score = 0;
 let timer = 59;
+let delay = 2;
 
 /* ~~~~Classes and Object Declarations~~~~ */
 
@@ -105,10 +106,10 @@ function handleQuestionClick(e) {
 
     if(unusedQuestionPool.length === 0){
         //TODO: send to end screen
-        setTimeout(transitionToEnd, 2000);
+        setTimeout(transitionToEnd, delay);
 
     } else {
-        setTimeout(() => {renderQuestion(drawFromQuestionPool())}, 2000);
+        setTimeout(() => {renderQuestion(drawFromQuestionPool())}, delay);
     }
 }
 
@@ -126,7 +127,7 @@ function renderFeedback(isAnswer, e) {
         setTimeout(() => {
             correctTag.setAttribute("style", "display: none");
             answerList.setAttribute("style", "pointer-events: auto")
-        },2000)
+        },delay)
     } 
     else {
         //highlight slection red and disable events
@@ -139,7 +140,7 @@ function renderFeedback(isAnswer, e) {
         setTimeout(() => {
             incorrectTag.setAttribute("style", "display: none");
             answerList.setAttribute("style", "pointer-events: auto")
-        },2000)
+        },delay)
     }
 
 }
@@ -204,3 +205,16 @@ startButton.addEventListener('click', () => {
 
 //Clicking any <li> in answerList bubbles up to this event
 answerList.addEventListener("click", handleQuestionClick)
+
+document.querySelector('#submitButton').addEventListener("click",() =>{
+
+    let player = {
+        initials: document.querySelector("#playerInitials").value,
+        highScore: score,
+    }
+
+    window.localStorage.setItem(player.initials, JSON.stringify(player))
+    location.href = "assets/HighScores.html";
+
+});
+
