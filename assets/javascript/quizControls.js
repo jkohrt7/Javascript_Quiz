@@ -110,11 +110,10 @@ function handleQuestionClick(e) {
 }
 
 //Displays a temporary feedback message
-function renderFeedback(bool) {
-    feedbackTag = document.querySelector("#feedbackText")
-
-    if(bool){
-        //display true for 30 seconds
+function renderFeedback(isAnswer) {
+   
+    //display correct/incorrect for 3 seconds.
+    if(isAnswer === false){
         correctTag = document.querySelector("#correct-feedback")
         correctTag.setAttribute("style", "display: block;")
         setTimeout(() => {
@@ -125,7 +124,7 @@ function renderFeedback(bool) {
         incorrectTag = document.querySelector("#incorrect-feedback")
         incorrectTag.setAttribute("style", "display: block;")
         setTimeout(() => {
-            correctTag.setAttribute("style", "display: none");
+            incorrectTag.setAttribute("style", "display: none");
         },3000)
     }
 
@@ -137,6 +136,13 @@ function drawFromQuestionPool() {
     nextQuestion = unusedQuestionPool[nextQuestionIndex];
     unusedQuestionPool.splice(nextQuestionIndex, 1);
     return nextQuestion;
+}
+
+//Starts the game timer and goes to end screen when finished
+function beginTimer() {
+    setInterval(() => {
+
+    });
 }
 
 /* ~~~~ Transition Functions ~~~~ */
