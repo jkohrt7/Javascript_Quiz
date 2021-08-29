@@ -5,17 +5,18 @@ let quizContent = document.querySelector(".quiz-active");
 
 let quizHeader = document.querySelector(".quiz-header");
 let answerList = document.querySelector(".quiz-answers");
+let numTimer = document.querySelector("#numTimer");
 
 //Game dependent variables
 let score = 0;
-let timer = 60;
+let timer = 59;
 
 /* ~~~~Classes and Object Declarations~~~~ */
 
 /** 
  * @class Question  
  * @description Contain necessary components for populating the quiz screen
- * @param {String} question: a string containing a question about JS
+ * @param {[String]} question: a string containing a question about JS
  * @param {[String, bool]} answers: an array of string/boolean pairs containing possible answers and their validity
  */
 
@@ -40,9 +41,10 @@ let q1 = new Question(
 let q2 = new Question(
     "API stands for...",
     [
-        ["Application Programming Interface", true],
+        
         ["Adaptive Programming Interface", false],
         ["Ancient Programming Information", false],
+        ["Application Programming Interface", true],
         ["Application Production Interface", false]
     ]
 )
@@ -50,8 +52,9 @@ let q2 = new Question(
 let q3 = new Question(
     "This Array method takes in a function, applies it to every element in the array, and then returns the processed array",
     [
-        ["Array.prototype.map()", true],
+        
         ["Array.prototype.filter()", false],
+        ["Array.prototype.map()", true],
         ["Array.prototype.reduce()", false],
         ["Array.prototype.apply()",false]
     ]
@@ -94,7 +97,7 @@ function renderQuestion(question) {
 //Handles clicking a question
 function handleQuestionClick(e) {
     let isSolution = e.target.getAttribute("data-answer");
-    renderFeedback(isSolution);
+    renderFeedback(isSolution, e);
 
     if(isSolution) {
         score += 1;
@@ -102,30 +105,41 @@ function handleQuestionClick(e) {
 
     if(unusedQuestionPool.length === 0){
         //TODO: send to end screen
-        transitionToEnd();
-        return;
+        setTimeout(transitionToEnd, 2000);
+
     } else {
-        renderQuestion(drawFromQuestionPool());
+        setTimeout(() => {renderQuestion(drawFromQuestionPool())}, 2000);
     }
 }
 
 //Displays a temporary feedback message
-function renderFeedback(isAnswer) {
+function renderFeedback(isAnswer, e) {
    
-    //display correct/incorrect for 3 seconds.
-    if(isAnswer === false){
+    if(isAnswer === 'true'){
+        //highlight selection green and disable events temporarily
+        e.target.setAttribute("style", "background-color: green; color: white;")
+        answerList.setAttribute("style", "pointer-events: none")
+
+        //display feedback temporarily
         correctTag = document.querySelector("#correct-feedback")
         correctTag.setAttribute("style", "display: block;")
         setTimeout(() => {
             correctTag.setAttribute("style", "display: none");
-        },3000)
+            answerList.setAttribute("style", "pointer-events: auto")
+        },2000)
     } 
     else {
+        //highlight slection red and disable events
+        e.target.setAttribute("style", "background-color: red; color: white;")
+        answerList.setAttribute("style", "pointer-events: none")
+
+        //display feedback temporarily
         incorrectTag = document.querySelector("#incorrect-feedback")
         incorrectTag.setAttribute("style", "display: block;")
         setTimeout(() => {
             incorrectTag.setAttribute("style", "display: none");
-        },3000)
+            answerList.setAttribute("style", "pointer-events: auto")
+        },2000)
     }
 
 }
@@ -139,11 +153,14 @@ function drawFromQuestionPool() {
 }
 
 //Starts the game timer and goes to end screen when finished
-function beginTimer() {
-    setInterval(() => {
-
-    });
-}
+let timerFunction  = setInterval(() => {
+        numTimer.textContent = timer;
+        timer -= 1;
+        if(timer < 0) {
+            transitionToEnd();
+            clearInterval(timerFunction);
+        }
+}, 1000);
 
 /* ~~~~ Transition Functions ~~~~ */
 
@@ -162,7 +179,7 @@ function transitionToQuiz() {
 //handles transition from in-quiz to post-quiz
 function transitionToEnd() {
     //todo: save data locally
-
+    clearInterval(timerFunction);
     quizContent.setAttribute("style", "display: none;");
     postQuizContent.setAttribute("style", "display: block;");
     return;
@@ -181,6 +198,7 @@ function transitionToStart() {
 startButton = document.querySelector("#startButton");
 startButton.addEventListener('click', () => {
     transitionToQuiz();
+    timerFunction;
     renderQuestion(drawFromQuestionPool());
 });
 
