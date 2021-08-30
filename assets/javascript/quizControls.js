@@ -105,6 +105,9 @@ function handleQuestionClick(e) {
     if(isSolution === "true") {
         score += 1;
     } 
+    else {
+        timer > 10 ? timer-=10 : timer = 0;
+    }
 
     if(unusedQuestionPool.length === 0){
         setTimeout(transitionToEnd, delay);
