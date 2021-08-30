@@ -7,6 +7,7 @@
     <title>JS Quiz</title>
     <meta name="description" content="A quiz for testing your javascript knowledge.">
     <meta name="author" content="Jared Kohrt">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel = "stylesheet" href = "assets/css/reset.css">
     <link rel = "stylesheet" href = "assets/css/style.css">
 </head>
@@ -14,26 +15,31 @@
 <body>
     <header class = "header">
         <div class = "header-content" id = "view-highscores-link" onclick="transitionToHighScore()">
-            View HighScores
+            View High Scores
         </div>
-        <div class = "header-content" id = "timer">TIME:<span id = "numTimer">60</span></div>
+        <div class = "header-content" id = "timer">Time: <span id = "numTimer">60</span></div>
     </header>
 
     <main>
         <article class = "centered-quiz-container">
             <!--These tags will only display before and after the quiz-->   
             <div class = "pre-quiz">
-                <h1>PRE-HEADER</h1>
-                <p>QUIZ RULES</p>
-                <button id = "startButton">Start Quiz</button>
+                <h1>A JavaScript Quiz about JavaScript</h1>
+                <p>Welcome! This application will prompt you with a series of questions related to the 
+                    JavaScript programming language. You will earn one point for each correct answer and
+                    zero for any incorrect answers. If the timer runs out, your score is not affected,
+                    but the game ends. The time will start when you click the button below. </p>
+                
+                <button id = "startButton" type="button" class="btn btn-outline-info">Start Quiz</button>
+                
             </div>
 
             <!--These tags will only display during the quiz-->
             <div class = "quiz-active">
                 <h2 class = "quiz-header">QUIZ HEADER</h2>
-                <ul class = "quiz-answers">
+                <ol class = "quiz-answers" type = "A">
                     <!--List items added dynamically in quizControls.js-->
-                </ul>
+                </ol>
 
                 <hr>
                 <p class = "feedback" id = "incorrect-feedback">Incorrect!</p>
@@ -45,14 +51,15 @@
                 <h2>All Done!</h2>
                 <p>enter initials</p>
                 <input type = "text" id = "playerInitials">
-                <button type = "reset" id = "submitButton">Submit</button>
+                <button type="button" id = "submitButton" class="btn btn-outline-info">Submit</button>
             </div>
 
             <div class = "high-scores">
-                <ul id = "score list">
-
-                </ul>
                 <h2>High Scores</h2>
+                <ol class = "score-list" type = "1">
+
+                </ol>
+                
             </div>
 
         </article>

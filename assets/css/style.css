@@ -2,32 +2,44 @@
 
 body {
     font-family:'Trebuchet MS', 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
-    line-height: 120%;
+    line-height: 140%;
+    font-size: larger;
 }
+
 
 body h1 {
     font-weight: bolder;
     font-size: x-large;
+    padding-bottom: 15px;
 }
 
 body h2 {
     font-weight: bolder;
     font-size: larger;
+    padding-bottom: 15px;
+}
+
+.btn {
+    font-family: 'Trebuchet MS', 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+    font-size: 110%;
 }
 
 /* Inside the header */
 .header {
-    margin: 2px;
-    padding:2px;
+    margin: 0px;
+    padding: 10px 0px 10px 10px;
     display: flex;
     justify-content: space-between;
+    background-color: var(--info);
+    color: white;
+    font-weight: bolder;
 }
 
 .header-content {
-    border: 1px green solid;
     text-align: left;
     width: 10em;
     font-size: larger;
+    padding-left: 15px;
 }
 
 #view-highscores-link a {
@@ -43,7 +55,6 @@ body h2 {
 main {
     display: flex;
     flex-direction: column;
-    border: 1px green solid;
     align-items: center;
 }
 
@@ -51,19 +62,30 @@ main {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    width: 30%;
+    width: 50%;
+    min-width: 320px;
     padding: 20px;
     margin: 5em 0em 5em 0em;
-    border: 1px red solid;
+    border-radius: 20px;
+    border: 3px solid var(--info);
 }
 
 .feedback {
     color: lightgray;
 }
 
+
 /* dynamically set styles */
 .pre-quiz {
     text-align: center;
+}
+
+.pre-quiz h1 {
+    padding-bottom: 15px;
+}
+
+.pre-quiz p {
+    padding-bottom: 10px;
 }
 
 .quiz-active {
@@ -72,6 +94,18 @@ main {
 
 .quiz-active h2 {
     text-align: center;
+}
+
+.quiz-active li {
+    padding: 5px;
+    border-radius: 10px;
+    transition: .2s;
+
+}
+
+.quiz-active li:hover {
+    background-color: var(--info);
+    color: white;
 }
 
 .post-quiz {
@@ -89,6 +123,7 @@ main {
 .high-scores {
     display: none;
 }
+
 
 
 

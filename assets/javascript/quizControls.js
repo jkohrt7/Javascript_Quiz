@@ -3,6 +3,7 @@ let preQuizContent = document.querySelector(".pre-quiz");
 let postQuizContent = document.querySelector(".post-quiz");
 let quizContent = document.querySelector(".quiz-active");
 let highScores = document.querySelector(".high-scores")
+let highScoresList = document.querySelector(".score-list")
 
 let quizHeader = document.querySelector(".quiz-header");
 let answerList = document.querySelector(".quiz-answers");
@@ -12,7 +13,7 @@ let numTimer = document.querySelector("#numTimer");
 let score = 0;
 let timer = 59;
 let timerFunction;
-let delay = 2;
+let delay = 1000;
 
 /* ~~~~Classes and Object Declarations~~~~ */
 
@@ -101,7 +102,7 @@ function handleQuestionClick(e) {
     let isSolution = e.target.getAttribute("data-answer");
     renderFeedback(isSolution, e);
 
-    if(isSolution) {
+    if(isSolution === "true") {
         score += 1;
     } 
 
@@ -122,11 +123,12 @@ function renderHighScores() {
     for (let i = 0; i < scoreArr.length && i < 10; i++) {
         let node = document.createElement("LI");
         node.appendChild(document.createTextNode(scoreArr[i].initials + ":  " + scoreArr[i].highScore));
-        highScores.appendChild(node);
+        highScoresList.appendChild(node);
     }
     let buttonNode = document.createElement("BUTTON");
     buttonNode.setAttribute("onclick", "window.location.reload()");
     buttonNode.innerHTML = "Play Again";
+    buttonNode.setAttribute("class", "btn btn-outline-info")
     highScores.appendChild(buttonNode);
 
 }
