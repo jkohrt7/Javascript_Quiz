@@ -2,6 +2,7 @@
 let preQuizContent = document.querySelector(".pre-quiz");
 let postQuizContent = document.querySelector(".post-quiz");
 let quizContent = document.querySelector(".quiz-active");
+let highScores = document.querySelector(".high-scores")
 
 let quizHeader = document.querySelector(".quiz-header");
 let answerList = document.querySelector(".quiz-answers");
@@ -10,6 +11,7 @@ let numTimer = document.querySelector("#numTimer");
 //Game dependent variables
 let score = 0;
 let timer = 59;
+let timerFunction;
 let delay = 2;
 
 /* ~~~~Classes and Object Declarations~~~~ */
@@ -83,7 +85,6 @@ function renderQuestion(question) {
     answerList.innerHTML = "";
 
     //add question text
-    console.log(question);
     quizHeader.textContent = question.text;
     
     //Append each answer in the list to the ul in the quiz container
@@ -105,12 +106,29 @@ function handleQuestionClick(e) {
     } 
 
     if(unusedQuestionPool.length === 0){
-        //TODO: send to end screen
         setTimeout(transitionToEnd, delay);
 
     } else {
         setTimeout(() => {renderQuestion(drawFromQuestionPool())}, delay);
     }
+}
+
+function renderHighScores() {
+    //get the list of scores and extract the top 10
+    let scoreArr = JSON.parse(localStorage.getItem("scoreList"));
+    scoreArr.sort((a,b) => b.score - a.score );
+    scoreArr = scoreArr.slice(0,9);
+
+    for (let i = 0; i < scoreArr.length && i < 10; i++) {
+        let node = document.createElement("LI");
+        node.appendChild(document.createTextNode(scoreArr[i].initials + ":  " + scoreArr[i].highScore));
+        highScores.appendChild(node);
+    }
+    let buttonNode = document.createElement("BUTTON");
+    buttonNode.setAttribute("onclick", "window.location.reload()");
+    buttonNode.innerHTML = "Play Again";
+    highScores.appendChild(buttonNode);
+
 }
 
 //Displays a temporary feedback message
@@ -154,14 +172,17 @@ function drawFromQuestionPool() {
 }
 
 //Starts the game timer and goes to end screen when finished
-let timerFunction  = setInterval(() => {
+function timerFunc() {
+    return setInterval(() => {
         numTimer.textContent = timer;
         timer -= 1;
         if(timer < 0) {
             transitionToEnd();
             clearInterval(timerFunction);
         }
-}, 1000);
+    }, 1000);
+}
+
 
 /* ~~~~ Transition Functions ~~~~ */
 
@@ -186,11 +207,14 @@ function transitionToEnd() {
     return;
 }
 
-//handles transition from post-quiz to pre-quiz
-function transitionToStart() {
+function transitionToHighScore() {
+    preQuizContent.setAttribute("style", "display: none;")
+    quizContent.setAttribute("style", "display: none;");
     postQuizContent.setAttribute("style", "display: none;");
-    preQuizContent.setAttribute("style", "display: block;");
-    return;
+    highScores.setAttribute("style", "display: block;");
+    clearInterval(timerFunction);
+    document.querySelector(".header-content").setAttribute("onclick", "")
+    renderHighScores();
 }
 
 /* ~~~~ Event Listeners ~~~~ */
@@ -199,13 +223,14 @@ function transitionToStart() {
 startButton = document.querySelector("#startButton");
 startButton.addEventListener('click', () => {
     transitionToQuiz();
-    timerFunction;
+    timerFunction = timerFunc();
     renderQuestion(drawFromQuestionPool());
 });
 
 //Clicking any <li> in answerList bubbles up to this event
 answerList.addEventListener("click", handleQuestionClick)
 
+//Submitting initials brings player to high scores
 document.querySelector('#submitButton').addEventListener("click",() =>{
 
     let player = {
@@ -213,8 +238,15 @@ document.querySelector('#submitButton').addEventListener("click",() =>{
         highScore: score,
     }
 
-    window.localStorage.setItem(player.initials, JSON.stringify(player))
-    location.href = "assets/HighScores.html";
+    if(window.localStorage.getItem("scoreList") == null) {
+        window.localStorage.setItem("scoreList", JSON.stringify([player]))
+    } else {
+        let scores = JSON.parse(window.localStorage.getItem("scoreList"));
+        scores.push(player);
+        window.localStorage.setItem("scoreList", JSON.stringify(scores));
+    }
+
+    transitionToHighScore();
 
 });
 

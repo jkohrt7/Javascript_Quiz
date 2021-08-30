@@ -13,8 +13,8 @@
 
 <body>
     <header class = "header">
-        <div class = "header-content" id = "view-highscores-link">
-            <a href = "assets/HighScores.html">View HighScores</a>
+        <div class = "header-content" id = "view-highscores-link" onclick="transitionToHighScore()">
+            View HighScores
         </div>
         <div class = "header-content" id = "timer">TIME:<span id = "numTimer">60</span></div>
     </header>
@@ -46,6 +46,13 @@
                 <p>enter initials</p>
                 <input type = "text" id = "playerInitials">
                 <button type = "reset" id = "submitButton">Submit</button>
+            </div>
+
+            <div class = "high-scores">
+                <ul id = "score list">
+
+                </ul>
+                <h2>High Scores</h2>
             </div>
 
         </article>
