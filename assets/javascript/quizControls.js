@@ -14,6 +14,7 @@ let score = 0;
 let timer = 59;
 let timerFunction;
 let delay = 1000;
+let questionArr;
 let currQuestionIndex = 0;
 
 /* ~~~~Classes and Object Declarations~~~~ */
@@ -75,14 +76,16 @@ let q4 = new Question(
     ]
 )
 
-let questionArr = [q1,q2,q3,q4];
-//let unusedQuestionPool = [q1,q2,q3,q4];
-
+questionArr = [q1,q2,q3,q4];
 
 /* ~~~~Helper Functions~~~~ */
 
-
-//Handles clicking a question
+/**
+ * @function:    handleQuestionClick
+ * @description: function that handles the logic and transitions that occur when user
+ *               clicks a potenial answer.
+ * @param e:     Event object whose target was the clicked li element
+ */
 function handleQuestionClick(e) {
     let isSolution = e.target.getAttribute("data-answer");
     currQuestionIndex += 1;
@@ -103,7 +106,12 @@ function handleQuestionClick(e) {
     }
 }
 
-//Starts the game timer and goes to end screen when finished
+/**
+ * @function timerFunc
+ * @description A function that returns a setInterval func that causes the timer to 
+ *              tick down once per second. 
+ * @returns     A setInterval function linked to the timer element
+ */
 function timerFunc() {
     return setInterval(() => {
         numTimer.textContent = timer;
@@ -115,7 +123,11 @@ function timerFunc() {
     }, 1000);
 }
 
-// Derstenfield shuffle; randomizes order of elements in an array
+/**
+ * @function shuffleArray
+ * @description Derstenfield shuffle that randomizes the order of an array's elements
+ * @returns     A setInterval function linked to the timer element
+ */
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -187,7 +199,11 @@ function renderFeedback(isAnswer, e) {
 
 }
 
-//Add a question and possible answers to the screen
+/** 
+ * @function renderQuestion
+ * @description Renders a question and its answers to the screen
+ * @param question: The Question object to be rendered
+*/
 function renderQuestion(question) {
 
     //clear out existing list elements
@@ -231,13 +247,13 @@ function transitionToQuiz() {
 
 //handles transition from in-quiz to post-quiz. 
 function transitionToEnd() {
-    //todo: save data locally
     clearInterval(timerFunction);
     quizContent.setAttribute("style", "display: none;");
     postQuizContent.setAttribute("style", "display: block;");
     return;
 }
 
+//handles transition from post-quiz to high score
 function transitionToHighScore() {
     preQuizContent.setAttribute("style", "display: none;")
     quizContent.setAttribute("style", "display: none;");
@@ -259,7 +275,7 @@ startButton.addEventListener('click', () => {
     renderQuestion(questionArr[currQuestionIndex])
 });
 
-// II. Progress Quiz
+// II. Progress through quiz questions
 // Clicking any <li> in answerList bubbles up to this event
 answerList.addEventListener("click", handleQuestionClick)
 
