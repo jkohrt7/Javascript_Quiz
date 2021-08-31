@@ -14,6 +14,7 @@ let score = 0;
 let timer = 59;
 let timerFunction;
 let delay = 1000;
+let currQuestionIndex = 0;
 
 /* ~~~~Classes and Object Declarations~~~~ */
 
@@ -74,49 +75,63 @@ let q4 = new Question(
     ]
 )
 
-const questionArr = [q1,q2,q3,q4];
-let unusedQuestionPool = [q1,q2,q3,q4];
+let questionArr = [q1,q2,q3,q4];
+//let unusedQuestionPool = [q1,q2,q3,q4];
+
 
 /* ~~~~Helper Functions~~~~ */
 
-//Add a question and possible answers to the screen
-function renderQuestion(question) {
-
-    //clear out existing list elements
-    answerList.innerHTML = "";
-
-    //add question text
-    quizHeader.textContent = question.text;
-    
-    //Append each answer in the list to the ul in the quiz container
-    for(let i = 0; i < question.answers.length; i++) {
-        let node = document.createElement("LI");
-        node.appendChild(document.createTextNode(question.answers[i][0]));
-        node.setAttribute("data-answer", question.answers[i][1]);
-        answerList.appendChild(node);
-    }
-}
 
 //Handles clicking a question
 function handleQuestionClick(e) {
     let isSolution = e.target.getAttribute("data-answer");
+    currQuestionIndex += 1;
     renderFeedback(isSolution, e);
 
     if(isSolution === "true") {
         score += 1;
     } 
     else {
-        timer > 10 ? timer-=10 : timer = 0;
+        timer > 10 ? timer -= 10 : timer = 0; //subtract 10 or set to 0 if timer<10
     }
 
-    if(unusedQuestionPool.length === 0){
+    if(currQuestionIndex === questionArr.length){
         setTimeout(transitionToEnd, delay);
 
     } else {
-        setTimeout(() => {renderQuestion(drawFromQuestionPool())}, delay);
+        setTimeout(() => {renderQuestion(questionArr[currQuestionIndex])}, delay);
     }
 }
 
+//Starts the game timer and goes to end screen when finished
+function timerFunc() {
+    return setInterval(() => {
+        numTimer.textContent = timer;
+        timer -= 1;
+        if(timer < 0) {
+            transitionToEnd();
+            clearInterval(timerFunction);
+        }
+    }, 1000);
+}
+
+// Derstenfield shuffle; randomizes order of elements in an array
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
+/* ~~~~ Render Functions ~~~~ */
+
+/** 
+ * @function renderHighScores
+ * @description Adds top 10 high scores in localStorage to the high score list
+*/
 function renderHighScores() {
     //get the list of scores and extract the top 10
     let scoreArr = JSON.parse(localStorage.getItem("scoreList"));
@@ -133,10 +148,14 @@ function renderHighScores() {
     buttonNode.innerHTML = "Play Again";
     buttonNode.setAttribute("class", "btn btn-outline-info")
     highScores.appendChild(buttonNode);
-
 }
 
-//Displays a temporary feedback message
+/** 
+ * @function renderHighScores
+ * @description Adds top 10 high scores in localStorage to the high score list
+ * @param isAnswer A string of the form 'true' or 'false'
+ * @param e An event object whose target is the li that was clicked
+*/
 function renderFeedback(isAnswer, e) {
    
     if(isAnswer === 'true'){
@@ -168,26 +187,23 @@ function renderFeedback(isAnswer, e) {
 
 }
 
-//Returns a question in the pool and then removes it
-function drawFromQuestionPool() {
-    nextQuestionIndex = Math.floor(Math.random() * unusedQuestionPool.length);
-    nextQuestion = unusedQuestionPool[nextQuestionIndex];
-    unusedQuestionPool.splice(nextQuestionIndex, 1);
-    return nextQuestion;
-}
+//Add a question and possible answers to the screen
+function renderQuestion(question) {
 
-//Starts the game timer and goes to end screen when finished
-function timerFunc() {
-    return setInterval(() => {
-        numTimer.textContent = timer;
-        timer -= 1;
-        if(timer < 0) {
-            transitionToEnd();
-            clearInterval(timerFunction);
-        }
-    }, 1000);
-}
+    //clear out existing list elements
+    answerList.innerHTML = "";
 
+    //add question text
+    quizHeader.textContent = question.text;
+    
+    //Append each answer in the list to the ul in the quiz container
+    for(let i = 0; i < question.answers.length; i++) {
+        let node = document.createElement("LI");
+        node.appendChild(document.createTextNode(question.answers[i][0]));
+        node.setAttribute("data-answer", question.answers[i][1]);
+        answerList.appendChild(node);
+    }
+}
 
 /* ~~~~ Transition Functions ~~~~ */
 
@@ -200,10 +216,20 @@ function transitionToQuiz() {
     //Alter visible divs
     preQuizContent.setAttribute("style", "display: none;");
     quizContent.setAttribute("style", "display: block;");
+
+    //randomize question order
+    questionArr = shuffleArray(questionArr);
+    for(let i = 0; i < questionArr.length; i++) {
+        questionArr[i].answers = shuffleArray(questionArr[i].answers);
+    }
+
+    //Start timer
+    timerFunction = timerFunc();
+
     return;
 }
 
-//handles transition from in-quiz to post-quiz
+//handles transition from in-quiz to post-quiz. 
 function transitionToEnd() {
     //todo: save data locally
     clearInterval(timerFunction);
@@ -222,20 +248,23 @@ function transitionToHighScore() {
     renderHighScores();
 }
 
+
 /* ~~~~ Event Listeners ~~~~ */
 
+// I. Start Quiz
 //Clicking the start button begins a new game and renders the first set of questions
 startButton = document.querySelector("#startButton");
 startButton.addEventListener('click', () => {
     transitionToQuiz();
-    timerFunction = timerFunc();
-    renderQuestion(drawFromQuestionPool());
+    renderQuestion(questionArr[currQuestionIndex])
 });
 
-//Clicking any <li> in answerList bubbles up to this event
+// II. Progress Quiz
+// Clicking any <li> in answerList bubbles up to this event
 answerList.addEventListener("click", handleQuestionClick)
 
-//Submitting initials brings player to high scores
+// III. Let player submit their score and view high scores
+// Submitting initials brings player to high scores
 document.querySelector('#submitButton').addEventListener("click",() =>{
 
     let player = {
@@ -252,6 +281,5 @@ document.querySelector('#submitButton').addEventListener("click",() =>{
     }
 
     transitionToHighScore();
-
 });
 
